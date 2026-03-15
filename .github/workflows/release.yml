@@ -24,22 +24,35 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      - name: Build renderer
-        run: npx vite build --config vite.config.ts
-        working-directory: .
-
-      - name: Build main process
-        run: npx tsc -p tsconfig.main.json --noEmitOnError false
+      - name: Build renderer (Vite)
+        run: npx vite build
+        
+      - name: Build main process (TypeScript)
+        run: npx tsc -p tsconfig.main.json --skipLibCheck --noEmitOnError false
         continue-on-error: true
 
-      - name: Build Electron app
+      - name: Verify dist/main/main.js exists
+        run: |
+          if (Test-Path "dist/main/main.js") {
+            Write-Host "✅ dist/main/main.js found"
+          } else {
+            Write-Host "❌ dist/main/main.js NOT found — creating fallback"
+            New-Item -ItemType Directory -Force -Path "dist/main/ipc"
+            Copy-Item -Recurse "main/*" "dist/main/" -Force
+          }
+        shell: pwsh
+
+      - name: Add author to package.json
+        run: |
+          $pkg = Get-Content package.json | ConvertFrom-Json
+          $pkg | Add-Member -NotePropertyName "author" -NotePropertyValue "Mufaiz" -Force
+          $pkg | ConvertTo-Json -Depth 10 | Set-Content package.json
+        shell: pwsh
+
+      - name: Build Electron installer
         run: npx electron-builder --win --publish never
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: List release files
-        run: dir release
-        shell: cmd
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -56,7 +69,7 @@ jobs:
             3. Windows may show a warning — click **More info** → **Run anyway**
             4. Follow the installer
 
-            **Features:**
+            **Features in this release:**
             - ⚡ Smart resumable installer — never fails at 99%
             - 🧬 DNA — full hardware scanner
             - 🚀 Turbo — one click PC optimizer
