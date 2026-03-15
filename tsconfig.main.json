@@ -7,11 +7,11 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "outDir": "./dist/main",
-    "rootDir": ".",
+    "rootDir": "./",
     "noImplicitAny": false,
     "noEmitOnError": false,
     "resolveJsonModule": true,
-    "typeRoots": ["./node_modules/electron/electron.d.ts"]
+    "allowJs": true
   },
   "include": ["main/**/*", "shared/**/*"]
 }
