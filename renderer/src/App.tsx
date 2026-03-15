@@ -7,6 +7,7 @@ import Turbo from './pages/Turbo'
 import Library from './pages/Library'
 import AICompanion from './pages/AICompanion'
 import Vault from './pages/Vault'
+import Together from './pages/Together'
 import { InstallJob } from '../../shared/types'
 import { mockAPI } from './mockAPI'
 
@@ -14,7 +15,7 @@ if (!(window as any).faizAPI) {
   (window as any).faizAPI = mockAPI
 }
 
-type Page = 'home' | 'installing' | 'error' | 'dna' | 'turbo' | 'library' | 'ai' | 'vault'
+type Page = 'home' | 'installing' | 'error' | 'dna' | 'turbo' | 'library' | 'ai' | 'vault' | 'together'
 
 export default function App() {
   const [page, setPage] = useState<Page>('home')
@@ -44,6 +45,7 @@ export default function App() {
     { id: 'turbo', icon: '🚀', label: 'Turbo' },
     { id: 'vault', icon: '📦', label: 'Vault' },
     { id: 'ai', icon: '🤖', label: 'FaizAI' },
+    { id: 'together', icon: '👥', label: 'Together' },
   ]
 
   return (
@@ -87,6 +89,7 @@ export default function App() {
           {page === 'library' && <Library onInstall={() => setPage('home')} />}
           {page === 'ai' && <AICompanion />}
           {page === 'vault' && <Vault />}
+          {page === 'together' && <Together />}
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 export const mockAPI = {
-  minimize: () => {},
-  maximize: () => {},
-  close: () => {},
+  minimize: () => { },
+  maximize: () => { },
+  close: () => { },
   openFolder: async () => '/games/test',
   openFile: async () => '/downloads/game.rar',
   getHardwareInfo: async () => ({
@@ -74,7 +74,7 @@ export const mockAPI = {
   }]),
   addExclusion: async () => ({ success: true }),
   removeExclusion: async () => ({ success: true }),
-  removeAllListeners: () => {},
+  removeAllListeners: () => { },
 
   // AI Companion
   aiChat: async (message: string, hardware: any) => {
@@ -111,6 +111,33 @@ export const mockAPI = {
       checksum: 'mock',
     }
   }),
+  // Together
+  togetherGetProfile: async () => ({
+    id: 'me',
+    name: 'Mufaiz',
+    avatar: '⚡',
+    status: 'online',
+    currentGame: undefined,
+  }),
+  togetherSaveProfile: async (profile: any) => ({ success: true }),
+  togetherGetFriends: async () => ([
+    { id: '1', name: 'Ahmed', avatar: '🔥', status: 'gaming', currentGame: 'GTA V', addedAt: new Date().toISOString() },
+    { id: '2', name: 'Zaid', avatar: '🚀', status: 'online', currentGame: undefined, addedAt: new Date().toISOString() },
+    { id: '3', name: 'Raza', avatar: '💀', status: 'offline', currentGame: undefined, addedAt: new Date().toISOString() },
+    { id: '4', name: 'Bilal', avatar: '🎯', status: 'gaming', currentGame: 'Elden Ring', addedAt: new Date().toISOString() },
+  ]),
+  togetherAddFriend: async (name: string) => ({
+    success: true,
+    friend: {
+      id: `friend_${Date.now()}`,
+      name,
+      avatar: '🎮',
+      status: 'online',
+      currentGame: undefined,
+      addedAt: new Date().toISOString(),
+    }
+  }),
+  togetherRemoveFriend: async (id: string) => ({ success: true }),
   vaultDelete: async (id: string) => ({ success: true }),
   vaultRestore: async (id: string, path: string) => ({ success: true }),
 }

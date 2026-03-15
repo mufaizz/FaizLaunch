@@ -11,6 +11,12 @@ contextBridge.exposeInMainWorld('faizAPI', {
   minimize: () => ipcRenderer.send('window-minimize'),
   maximize: () => ipcRenderer.send('window-maximize'),
   close: () => ipcRenderer.send('window-close'),
+  togetherGetProfile: () => ipcRenderer.invoke('together:getProfile'),
+  togetherSaveProfile: (profile: any) => ipcRenderer.invoke('together:saveProfile', profile),
+  togetherGetFriends: () => ipcRenderer.invoke('together:getFriends'),
+  togetherAddFriend: (name: string) => ipcRenderer.invoke('together:addFriend', name),
+  togetherRemoveFriend: (id: string) => ipcRenderer.invoke('together:removeFriend', id),
+  togetherUpdateStatus: (status: string, game?: string) => ipcRenderer.invoke('together:updateStatus', status, game),
 
   // Dialogs
   openFolder: () => ipcRenderer.invoke('dialog:openFolder'),
