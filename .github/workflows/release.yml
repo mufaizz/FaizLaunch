@@ -31,12 +31,8 @@ jobs:
         run: npx tsc -p tsconfig.main.json --noEmitOnError false
         continue-on-error: true
 
-      - name: Verify build output
-        run: |
-          Write-Host "=== dist/main/main contents ==="
-          Get-ChildItem -Recurse dist/main/main/ | Select-Object FullName
-          Write-Host "=== dist/renderer contents ==="
-          Get-ChildItem dist/renderer/ | Select-Object Name
+      - name: Show full dist structure
+        run: Get-ChildItem -Recurse dist/ | Select-Object FullName
         shell: pwsh
 
       - name: Build Windows installer
@@ -52,9 +48,8 @@ jobs:
             ## ⚡ FaizLaunch ${{ github.ref_name }}
             ### For the gamer who has nothing but loves games the most.
             **How to install:**
-            1. Download `FaizLaunch-Setup-${{ github.ref_name }}.exe`
+            1. Download the .exe below
             2. Run as Administrator
-            3. Windows may show a warning — click **More info** → **Run anyway**
-            4. Follow the installer
+            3. Click More info → Run anyway if Windows warns you
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
