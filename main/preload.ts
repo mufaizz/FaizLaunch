@@ -34,6 +34,7 @@ contextBridge.exposeInMainWorld('faizAPI', {
   cancelInstall: (jobId: string) => ipcRenderer.invoke('installer:cancel', jobId),
   getCheckpoint: (jobId: string) => ipcRenderer.invoke('installer:getCheckpoint', jobId),
   getAllJobs: () => ipcRenderer.invoke('installer:getAllJobs'),
+  detectExtractor: () => ipcRenderer.invoke('installer:detectExtractor'),
 
   // Progress events
   onProgress: (callback: (data: any) => void) => {
