@@ -23,8 +23,6 @@ nsis:
   createStartMenuShortcut: true
   shortcutName: FaizLaunch
   license: LICENSE.txt
-  # ── 4. Optimize installer size ──────────────────────────
-  compression: maximum
 
 linux:
   target:
@@ -42,10 +40,6 @@ files:
   - assets/**/*
   - package.json
 
-# ── 10. asar for faster file reads ──────────────────────────
 asar: true
 asarUnpack:
   - "**/*.node"
-
-# ── Remove dev files from build ──────────────────────────────
-afterPack: null
