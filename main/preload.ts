@@ -17,7 +17,8 @@ contextBridge.exposeInMainWorld('faizAPI', {
   togetherAddFriend: (name: string) => ipcRenderer.invoke('together:addFriend', name),
   togetherRemoveFriend: (id: string) => ipcRenderer.invoke('together:removeFriend', id),
   togetherUpdateStatus: (status: string, game?: string) => ipcRenderer.invoke('together:updateStatus', status, game),
-
+  doctorScan: () => ipcRenderer.invoke('doctor:scan'),
+  doctorAutofix: (issueId: string) => ipcRenderer.invoke('doctor:autofix', issueId),
   // Dialogs
   openFolder: () => ipcRenderer.invoke('dialog:openFolder'),
   openFile: () => ipcRenderer.invoke('dialog:openFile'),

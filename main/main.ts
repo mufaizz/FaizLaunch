@@ -7,6 +7,7 @@ import { registerErrorAnalyzerHandlers } from './ipc/errorAnalyzer'
 import { registerVaultHandlers } from './ipc/vault'
 import { registerAICompanionHandlers } from './ipc/aicompanion'
 import { registerTogetherHandlers } from './ipc/together'
+import { registerDoctorHandlers } from './ipc/doctor'
 
 let mainWindow: BrowserWindow | null = null
 
@@ -44,6 +45,7 @@ app.whenReady().then(() => {
   registerVaultHandlers()
   registerAICompanionHandlers()
   registerTogetherHandlers()
+  registerDoctorHandlers()
 
   // Register all IPC handlers
   registerInstallerHandlers()

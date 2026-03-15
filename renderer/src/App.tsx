@@ -8,6 +8,8 @@ import Library from './pages/Library'
 import AICompanion from './pages/AICompanion'
 import Vault from './pages/Vault'
 import Together from './pages/Together'
+import Doctor from './pages/Doctor'
+import Settings from './pages/Settings'
 import { InstallJob } from '../../shared/types'
 import { mockAPI } from './mockAPI'
 
@@ -15,7 +17,7 @@ if (!(window as any).faizAPI) {
   (window as any).faizAPI = mockAPI
 }
 
-type Page = 'home' | 'installing' | 'error' | 'dna' | 'turbo' | 'library' | 'ai' | 'vault' | 'together'
+type Page = 'home' | 'installing' | 'error' | 'dna' | 'turbo' | 'library' | 'ai' | 'vault' | 'together' | 'doctor' | 'settings'
 
 export default function App() {
   const [page, setPage] = useState<Page>('home')
@@ -46,6 +48,8 @@ export default function App() {
     { id: 'vault', icon: '📦', label: 'Vault' },
     { id: 'ai', icon: '🤖', label: 'FaizAI' },
     { id: 'together', icon: '👥', label: 'Together' },
+    { id: 'doctor', icon: '🩺', label: 'Doctor' },
+    { id: 'settings', icon: '⚙️', label: 'Settings' },
   ]
 
   return (
@@ -90,6 +94,8 @@ export default function App() {
           {page === 'ai' && <AICompanion />}
           {page === 'vault' && <Vault />}
           {page === 'together' && <Together />}
+          {page === 'doctor' && <Doctor />}
+          {page === 'settings' && <Settings />}
         </div>
       </div>
     </div>
