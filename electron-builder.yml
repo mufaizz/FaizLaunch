@@ -11,19 +11,17 @@ win:
   target:
     - target: nsis
       arch: [x64]
-  icon: assets/icon.png
+  icon: assets/icon.ico
   requestedExecutionLevel: requireAdministrator
 
 nsis:
   oneClick: false
   allowToChangeInstallationDirectory: true
-  installerIcon: assets/icon.png
-  installerHeaderIcon: assets/icon.png
+  installerIcon: assets/icon.ico
+  uninstallerIcon: assets/icon.ico
   createDesktopShortcut: true
   createStartMenuShortcut: true
   shortcutName: FaizLaunch
-  installerSidebar: assets/icon.png
-  uninstallerSidebar: assets/icon.png
   license: LICENSE.txt
 
 linux:
@@ -41,7 +39,3 @@ files:
   - dist/**/*
   - assets/**/*
   - package.json
-
-extraResources:
-  - from: assets/
-    to: assets/
