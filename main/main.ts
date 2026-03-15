@@ -30,43 +30,10 @@ function createWindow() {
   if (process.env.NODE_ENV === 'development') {
     mainWindow.loadURL('http://localhost:5173')
   } else {
-    const appPath = app.getAppPath()
-    const dirName = __dirname
-    
-    // Try all possible paths
-    const paths = [
-      path.join(appPath, 'dist', 'renderer', 'index.html'),
-      path.join(appPath, '..', 'dist', 'renderer', 'index.html'),
-      path.join(dirName, '..', '..', '..', 'dist', 'renderer', 'index.html'),
-      path.join(dirName, '..', '..', 'renderer', 'index.html'),
-    ]
-
-    const fs = require('fs')
-    let loaded = false
-
-    for (const p of paths) {
-      if (fs.existsSync(p)) {
-        console.log('Found renderer at:', p)
-        mainWindow!.loadFile(p)
-        loaded = true
-        break
-      }
-    }
-
-    if (!loaded) {
-      const debugHTML = `
-        <html>
-        <body style="background:#0a0a0f;color:#f5a623;font-family:monospace;padding:20px">
-        <h1>⚡ FaizLaunch Debug</h1>
-        <p><b>appPath:</b> ${appPath}</p>
-        <p><b>__dirname:</b> ${dirName}</p>
-        <p><b>Paths tried:</b></p>
-        <ul>${paths.map(p => `<li style="color:${fs.existsSync(p)?'#43d98c':'#ff4757'}">${p} — ${fs.existsSync(p)?'EXISTS':'NOT FOUND'}</li>`).join('')}</ul>
-        </body>
-        </html>
-      `
-      mainWindow!.loadURL('data:text/html;charset=utf-8,' + encodeURIComponent(debugHTML))
-    }
+    // Inside asar: __dirname = app.asar/dist/main/main
+    // index.html  = app.asar/dist/renderer/index.html
+    const rendererPath = path.join(__dirname, '..', '..', 'renderer', 'index.html')
+    mainWindow.loadFile(rendererPath)
   }
 
   mainWindow.on('closed', () => { mainWindow = null })
