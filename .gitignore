@@ -4,3 +4,4 @@ dist-electron/
 *.js.map
 .env
 release/
+*.py
