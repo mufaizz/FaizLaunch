@@ -36,6 +36,7 @@ directories:
   buildResources: assets
 
 files:
-  - dist/**/*
+  - dist/main/**/*
+  - dist/renderer/**/*
   - assets/**/*
   - package.json

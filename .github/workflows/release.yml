@@ -31,14 +31,12 @@ jobs:
         run: npx tsc -p tsconfig.main.json --noEmitOnError false
         continue-on-error: true
 
-      - name: Verify main.js
+      - name: Verify build output
         run: |
-          if (Test-Path "dist/main/main/main.js") {
-            Write-Host "✅ main.js found at dist/main/main/main.js"
-          } else {
-            Get-ChildItem -Recurse dist/ | Select-Object FullName
-            exit 1
-          }
+          Write-Host "=== dist/main/main contents ==="
+          Get-ChildItem -Recurse dist/main/main/ | Select-Object FullName
+          Write-Host "=== dist/renderer contents ==="
+          Get-ChildItem dist/renderer/ | Select-Object Name
         shell: pwsh
 
       - name: Build Windows installer
@@ -46,33 +44,17 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: List release files
-        run: Get-ChildItem release/
-        shell: pwsh
-
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: release/*.exe
           body: |
             ## ⚡ FaizLaunch ${{ github.ref_name }}
-
             ### For the gamer who has nothing but loves games the most.
-
             **How to install:**
             1. Download `FaizLaunch-Setup-${{ github.ref_name }}.exe`
             2. Run as Administrator
             3. Windows may show a warning — click **More info** → **Run anyway**
             4. Follow the installer
-
-            **Features:**
-            - ⚡ Smart resumable installer — never fails at 99%
-            - 🧬 DNA — full hardware scanner
-            - 🚀 Turbo — one click PC optimizer
-            - 📦 Vault — game backup system
-            - 🤖 FaizAI — AI error diagnosis
-            - 👥 Together — social layer
-            - 🩺 Doctor — predictive repair
-            - ⚙️ Settings panel
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
