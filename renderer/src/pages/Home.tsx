@@ -33,14 +33,16 @@ export default function Home({ onStartInstall }: Props) {
       alert('Please fill in all fields')
       return
     }
+
     setLoading(true)
+
+    // Get warnings but NEVER block install
     const w = await api.checkRequirements({ minRam: 4, minDisk: 10, estimatedInstallTime: true })
     setWarnings(w)
-    if (w.some((x: HardwareWarning) => x.severity === 'high')) {
-      setLoading(false)
-      return
-    }
+
+    // Add Defender exclusion
     await api.addExclusion(destPath)
+
     const job: InstallJob = {
       id: `job_${Date.now()}`,
       name: gameName,
@@ -54,7 +56,9 @@ export default function Home({ onStartInstall }: Props) {
       startedAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     }
+
     setLoading(false)
+    // Always proceed regardless of warnings
     onStartInstall(job)
   }
 
@@ -114,6 +118,7 @@ export default function Home({ onStartInstall }: Props) {
             </div>
           </div>
 
+          {/* Warnings shown but never block install */}
           {warnings.length > 0 && (
             <div className="warnings">
               {warnings.map((w, i) => (
@@ -124,8 +129,12 @@ export default function Home({ onStartInstall }: Props) {
             </div>
           )}
 
-          <button className="install-btn" onClick={handleInstall} disabled={loading}>
-            {loading ? 'Checking PC...' : '⚡ Start Install'}
+          <button
+            className="install-btn"
+            onClick={handleInstall}
+            disabled={loading}
+          >
+            {loading ? 'Preparing...' : '⚡ Start Install'}
           </button>
         </div>
 
