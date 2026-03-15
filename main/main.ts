@@ -24,16 +24,26 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
       nodeIntegration: false,
+      webSecurity: false,
     },
   })
 
   if (process.env.NODE_ENV === 'development') {
     mainWindow.loadURL('http://localhost:5173')
   } else {
-    // Inside asar: __dirname = app.asar/dist/main/main
-    // index.html  = app.asar/dist/renderer/index.html
+    // Open DevTools to see exact error
+    mainWindow.webContents.openDevTools()
+    
     const rendererPath = path.join(__dirname, '..', '..', 'renderer', 'index.html')
-    mainWindow.loadFile(rendererPath)
+    console.log('Loading from:', rendererPath)
+    
+    mainWindow.loadFile(rendererPath).catch((err: any) => {
+      console.error('loadFile failed:', err)
+      // Try with URL format
+      const fileUrl = 'file://' + rendererPath.replace(/\\/g, '/')
+      console.log('Trying URL:', fileUrl)
+      mainWindow!.loadURL(fileUrl)
+    })
   }
 
   mainWindow.on('closed', () => { mainWindow = null })
