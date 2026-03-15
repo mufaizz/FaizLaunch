@@ -1,51 +1,23 @@
-# Dependencies
 node_modules/
-
-# Build output
 dist/
 dist-electron/
-
-# Release builds
 release/
-!release/.gitkeep
-
-# Logs
 *.log
 npm-debug.log*
-
-# Environment
 .env
 .env.local
-
-# OS files
 .DS_Store
 Thumbs.db
 desktop.ini
-
-# Editor
 .vscode/
 .idea/
 *.swp
 *.swo
-
-# TypeScript cache
 *.tsbuildinfo
-
-# Temp files
 *.tmp
 *.temp
-
-# Python cache
 __pycache__/
 *.pyc
-
-# Generated icons (keep only final ones)
-assets/create-icon.js
-assets/generate-icon.js
-assets/make-icon.js
-assets/make-ico.js
 assets/convert-icon.py
 assets/icon_new.png
 assets/icon_original.jpg
-assets/main.jpg
-assets/main.png
