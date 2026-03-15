@@ -24,35 +24,31 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      - name: Build renderer (Vite)
+      - name: Build renderer
         run: npx vite build
-        
-      - name: Build main process (TypeScript)
-        run: npx tsc -p tsconfig.main.json --skipLibCheck --noEmitOnError false
+
+      - name: Build main process
+        run: npx tsc -p tsconfig.main.json --noEmitOnError false
         continue-on-error: true
 
-      - name: Verify dist/main/main.js exists
+      - name: Verify main.js
         run: |
-          if (Test-Path "dist/main/main.js") {
-            Write-Host "✅ dist/main/main.js found"
+          if (Test-Path "dist/main/main/main.js") {
+            Write-Host "✅ main.js found at dist/main/main/main.js"
           } else {
-            Write-Host "❌ dist/main/main.js NOT found — creating fallback"
-            New-Item -ItemType Directory -Force -Path "dist/main/ipc"
-            Copy-Item -Recurse "main/*" "dist/main/" -Force
+            Get-ChildItem -Recurse dist/ | Select-Object FullName
+            exit 1
           }
         shell: pwsh
 
-      - name: Add author to package.json
-        run: |
-          $pkg = Get-Content package.json | ConvertFrom-Json
-          $pkg | Add-Member -NotePropertyName "author" -NotePropertyValue "Mufaiz" -Force
-          $pkg | ConvertTo-Json -Depth 10 | Set-Content package.json
-        shell: pwsh
-
-      - name: Build Electron installer
-        run: npx electron-builder --win --publish never
+      - name: Build Windows installer
+        run: npx electron-builder --win --x64 --publish never
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: List release files
+        run: Get-ChildItem release/
+        shell: pwsh
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -69,7 +65,7 @@ jobs:
             3. Windows may show a warning — click **More info** → **Run anyway**
             4. Follow the installer
 
-            **Features in this release:**
+            **Features:**
             - ⚡ Smart resumable installer — never fails at 99%
             - 🧬 DNA — full hardware scanner
             - 🚀 Turbo — one click PC optimizer
