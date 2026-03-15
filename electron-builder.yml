@@ -2,11 +2,17 @@ appId: com.faizlaunch.app
 productName: FaizLaunch
 copyright: FaizLaunch — For the gamer who has nothing but loves games the most
 
+publish:
+  provider: github
+  owner: mufaizz
+  repo: FaizLaunch
+
 win:
   target:
     - target: nsis
       arch: [x64]
   icon: assets/icon.png
+  requestedExecutionLevel: requireAdministrator
 
 nsis:
   oneClick: false
@@ -15,6 +21,17 @@ nsis:
   installerHeaderIcon: assets/icon.png
   createDesktopShortcut: true
   createStartMenuShortcut: true
+  shortcutName: FaizLaunch
+  installerSidebar: assets/icon.png
+  uninstallerSidebar: assets/icon.png
+  license: LICENSE.txt
+
+linux:
+  target:
+    - target: AppImage
+      arch: [x64]
+  icon: assets/icon.png
+  category: Game
 
 directories:
   output: release
@@ -24,3 +41,7 @@ files:
   - dist/**/*
   - assets/**/*
   - package.json
+
+extraResources:
+  - from: assets/
+    to: assets/

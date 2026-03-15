@@ -1,0 +1,65 @@
+name: Release FaizLaunch
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build app
+        run: npm run build
+
+      - name: Build and publish release
+        run: npm run dist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            release/*.exe
+            release/*.yml
+          body: |
+            ## ⚡ FaizLaunch ${{ github.ref_name }}
+
+            ### For the gamer who has nothing but loves games the most.
+
+            **What's included:**
+            - ⚡ Smart resumable installer
+            - 🧬 DNA hardware scanner
+            - 🚀 Turbo PC optimizer
+            - 📦 Vault game backup
+            - 🤖 FaizAI error assistant
+            - 👥 Together social layer
+            - 🩺 Doctor predictive repair
+            - ⚙️ Full settings panel
+
+            **Installation:**
+            1. Download `FaizLaunch-Setup-${{ github.ref_name }}.exe`
+            2. Run as Administrator
+            3. Follow the installer
+            4. Launch FaizLaunch
+
+            > ⚠️ Windows may show a warning since the app is not code signed yet.
+            > Click "More info" → "Run anyway" to proceed.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
