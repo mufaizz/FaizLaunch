@@ -29,14 +29,44 @@ function createWindow() {
 
   if (process.env.NODE_ENV === 'development') {
     mainWindow.loadURL('http://localhost:5173')
-    mainWindow.webContents.openDevTools()
   } else {
-    // app.getAppPath() returns the root of the asar/app directory
-    const appRoot = app.getAppPath()
-    const rendererPath = path.join(appRoot, 'dist', 'renderer', 'index.html')
-    console.log('App root:', appRoot)
-    console.log('Loading:', rendererPath)
-    mainWindow.loadFile(rendererPath)
+    const appPath = app.getAppPath()
+    const dirName = __dirname
+    
+    // Try all possible paths
+    const paths = [
+      path.join(appPath, 'dist', 'renderer', 'index.html'),
+      path.join(appPath, '..', 'dist', 'renderer', 'index.html'),
+      path.join(dirName, '..', '..', '..', 'dist', 'renderer', 'index.html'),
+      path.join(dirName, '..', '..', 'renderer', 'index.html'),
+    ]
+
+    const fs = require('fs')
+    let loaded = false
+
+    for (const p of paths) {
+      if (fs.existsSync(p)) {
+        console.log('Found renderer at:', p)
+        mainWindow!.loadFile(p)
+        loaded = true
+        break
+      }
+    }
+
+    if (!loaded) {
+      const debugHTML = `
+        <html>
+        <body style="background:#0a0a0f;color:#f5a623;font-family:monospace;padding:20px">
+        <h1>⚡ FaizLaunch Debug</h1>
+        <p><b>appPath:</b> ${appPath}</p>
+        <p><b>__dirname:</b> ${dirName}</p>
+        <p><b>Paths tried:</b></p>
+        <ul>${paths.map(p => `<li style="color:${fs.existsSync(p)?'#43d98c':'#ff4757'}">${p} — ${fs.existsSync(p)?'EXISTS':'NOT FOUND'}</li>`).join('')}</ul>
+        </body>
+        </html>
+      `
+      mainWindow!.loadURL('data:text/html;charset=utf-8,' + encodeURIComponent(debugHTML))
+    }
   }
 
   mainWindow.on('closed', () => { mainWindow = null })
@@ -44,7 +74,6 @@ function createWindow() {
 
 app.whenReady().then(() => {
   createWindow()
-
   registerInstallerHandlers()
   registerHardwareHandlers()
   registerDefenderHandlers()
@@ -62,9 +91,7 @@ app.whenReady().then(() => {
   ipcMain.on('window-close', () => mainWindow?.close())
 
   ipcMain.handle('dialog:openFolder', async () => {
-    const result = await dialog.showOpenDialog(mainWindow!, {
-      properties: ['openDirectory'],
-    })
+    const result = await dialog.showOpenDialog(mainWindow!, { properties: ['openDirectory'] })
     return result.filePaths[0] || null
   })
 
