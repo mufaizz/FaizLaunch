@@ -11,14 +11,6 @@ import { registerDoctorHandlers } from './ipc/doctor'
 
 let mainWindow: BrowserWindow | null = null
 
-function getRendererPath() {
-  // __dirname in production = dist/main/main/
-  // we need to go up 3 levels to project root, then into dist/renderer
-  const rendererPath = path.join(__dirname, '..', '..', '..', 'dist', 'renderer', 'index.html')
-  console.log('Loading renderer from:', rendererPath)
-  return rendererPath
-}
-
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1280,
@@ -39,17 +31,12 @@ function createWindow() {
     mainWindow.loadURL('http://localhost:5173')
     mainWindow.webContents.openDevTools()
   } else {
-    const rendererPath = getRendererPath()
-    mainWindow.loadFile(rendererPath).catch(err => {
-      console.error('Failed to load renderer:', err)
-      // Fallback — try different relative paths
-      const fallback = path.join(__dirname, '..', '..', 'renderer', 'index.html')
-      console.log('Trying fallback:', fallback)
-      mainWindow!.loadFile(fallback).catch(err2 => {
-        console.error('Fallback also failed:', err2)
-        mainWindow!.loadURL(`data:text/html,<h1>Error loading FaizLaunch UI</h1><p>${err.message}</p><p>Path tried: ${rendererPath}</p>`)
-      })
-    })
+    // app.getAppPath() returns the root of the asar/app directory
+    const appRoot = app.getAppPath()
+    const rendererPath = path.join(appRoot, 'dist', 'renderer', 'index.html')
+    console.log('App root:', appRoot)
+    console.log('Loading:', rendererPath)
+    mainWindow.loadFile(rendererPath)
   }
 
   mainWindow.on('closed', () => { mainWindow = null })
