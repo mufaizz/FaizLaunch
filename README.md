@@ -85,7 +85,7 @@ FaizLaunch is not code signed. Full source is public — verify it yourself.
 ## Contact
 
 📧 Email: mufaizmalik9622@gmail.com
-📸 Instagram: [@mufaiz.exe](https://instagram.com/mufaiz.exe)
+📸 Instagram: [@mufaiz.exe](https://instagram.com/muffaizz)
 💻 GitHub: [github.com/mufaizz](https://github.com/mufaizz)
 
 ---
